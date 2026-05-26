@@ -1,22 +1,20 @@
-# script_writer.py
+import os
 from openai import OpenAI
-from config import OPENAI_API_KEY
-
-client = OpenAI(api_key=OPENAI_API_KEY)
 
 def generate_script(idea):
-    prompt = f"""
-    Create a fast-paced animated challenge video script.
-    Rules:
-    - Strong hook in first 5 seconds
-    - New twist every 10 seconds
-    - Clear winner at the end
-    Idea: {idea}
-    """
-
+    # This securely reads the key we saved in Render's Environment Variables
+    api_key = os.getenv("OPENAI_API_KEY")
+    
+    # Initialize the correct, modern OpenAI client
+    client = OpenAI(api_key=api_key)
+    
+    # Generate the script using the optimized gpt-4o-mini model
     response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": prompt}]
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are an expert AI Video Director. Write viral, engaging video scripts."},
+            {"role": "user", "content": f"Create a complete viral script for this idea: {idea}"}
+        ]
     )
-
+    
     return response.choices[0].message.content
