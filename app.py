@@ -24,6 +24,7 @@ HTML = """
         .card {
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: #ffffff;
         }
         pre {
             background: #f8f9fa;
@@ -37,7 +38,7 @@ HTML = """
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card p-4">
+            <div class="card p-4 my-5">
                 <h2 class="text-center mb-3">🎬 AI Director</h2>
                 <p class="text-center text-muted">
                     Generate viral animated video scripts using AI
