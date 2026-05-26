@@ -6,31 +6,72 @@ app = Flask(__name__)
 
 HTML = """
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>AI Director</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+        }
+    </style>
 </head>
-<body style="font-family:Arial; text-align:center; padding: 20px;">
-    <h1>🎬 AI Director</h1>
-    <p>Create viral animated video ideas</p>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h2 class="text-center mb-3">🎬 AI Director</h2>
+                <p class="text-center text-muted">
+                    Generate viral animated video scripts using AI
+                </p>
 
-    <form method="POST">
-        <input type="text" name="idea" placeholder="Enter video idea" size="50" required>
-        <br><br>
-        <button type="submit">Create Script</button>
-    </form>
+                <form method="POST">
+                    <input class="form-control mb-3" 
+                           type="text" 
+                           name="idea" 
+                           placeholder="Enter your video idea..." 
+                           required>
 
-    {% if error %}
-        <hr style="border-color: red;">
-        <h3 style="color: red;">⚠️ Application Error</h3>
-        <pre style="text-align:left; max-width:800px; margin:auto; background: #fee; padding: 15px; border-radius: 5px; overflow-x: auto;">{{ error }}</pre>
-    {% endif %}
+                    <div class="d-grid">
+                        <button class="btn btn-primary btn-lg">
+                            Create Script
+                        </button>
+                    </div>
+                </form>
 
-    {% if script %}
-        <hr>
-        <h3>Generated Script</h3>
-        <pre style="text-align:left; max-width:800px; margin:auto; background: #f9f9f9; padding: 15px; border-radius: 5px; white-space: pre-wrap;">{{ script }}</pre>
-    {% endif %}
+                {% if error %}
+                    <div class="mt-4 p-3 rounded bg-danger bg-opacity-10 border border-danger text-danger text-center">
+                        <strong>Notice:</strong> OpenAI account quota exceeded. Add credits to activate generation.
+                    </div>
+                {% endif %}
+
+                {% if script %}
+                <hr>
+                <h5 class="mt-3">Generated Script</h5>
+                <pre>{{ script }}</pre>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
 """
@@ -44,7 +85,6 @@ def home():
             idea = request.form["idea"]
             script = generate_script(idea)
         except Exception as e:
-            # Captures the exact reason it failed
             error = traceback.format_exc()
             
     return render_template_string(HTML, script=script, error=error)
